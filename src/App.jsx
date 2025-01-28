@@ -47,14 +47,22 @@ function App() {
                             el.e.style.left = `${el.pol}px`;
 
                             if (polright.right < polleftgamebox.left) {
-                                try{
-                                    arrtown.current[i].splice(i,1);
-                                    boxtown.current.children[i].remove();
-                                    return
-                                }
-                                catch{}
+                                arrtown.current.splice(i,1);
+                                boxtown.current.children[i].remove();
                             }
                         });
+
+                        // for (let i = 0 ; i < arrtown.current.length ; i++) {
+                        //     let polright = arrtown.current[i].e.getBoundingClientRect();
+
+                        //     arrtown.current[i].e.style.left = `${arrtown.current[i].pol}px`;
+
+                        //     if (polright.right < polleftgamebox.left) {
+                        //         arrtown.current.splice(i,1);
+                        //         boxtown.current.children[i].remove();
+                        //         continue;
+                        //     }
+                        // }
                     }
 
                     speedroad -= speedlevel;

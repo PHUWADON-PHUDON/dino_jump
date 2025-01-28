@@ -22,10 +22,29 @@ body{
     position: absolute;
     left: 80px;
     bottom: 50px;
+    animation: aniplane .5s linear forwards;
 }
 
 .boxtown{
     position: absolute;
     width: 100%;
     height: 100%;
+}
+
+@keyframes aniplane{
+    0%{
+        transform: translateY(0);
+    }
+    20%{
+        transform: translateY(-20px);
+    }
+    40%{
+        transform: translateY(-60px);
+    }
+    80%{
+        transform: translateY(-100px);
+    }
+    100%{
+        transform: translateY(0);
+    }
 }
