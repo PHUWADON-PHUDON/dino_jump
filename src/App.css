@@ -3,6 +3,7 @@ body{
     overflow: hidden;
     display: grid;
     place-items: center;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .boxgame{
@@ -34,6 +35,10 @@ body{
     animation: aniplane .9s ease-in-out forwards;
 }
 
+.addanimationpause{
+    animation-play-state: paused;
+}
+
 @keyframes aniplane{
     0%{
         transform: translateY(0) rotate(0deg);
@@ -42,9 +47,18 @@ body{
         transform: translateY(-180px) rotate(-20deg);
     }
     80%{
-        transform: translateY(10px) rotate(5deg);
+        transform: translateY(5px) rotate(5deg);
     }
     100%{
         transform: translateY(0) rotate(0deg);
     }
+}
+
+.displayscore{
+    position: absolute;
+    width: 100%;
+    color: #bbbbbb;
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
 }
