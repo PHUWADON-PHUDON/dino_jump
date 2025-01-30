@@ -21,8 +21,7 @@ body{
 .plane{
     position: absolute;
     left: 80px;
-    bottom: 50px;
-    animation: aniplane .5s linear forwards;
+    bottom: 55px;
 }
 
 .boxtown{
@@ -31,20 +30,21 @@ body{
     height: 100%;
 }
 
+.addplaneani{
+    animation: aniplane .9s ease-in-out forwards;
+}
+
 @keyframes aniplane{
     0%{
-        transform: translateY(0);
-    }
-    20%{
-        transform: translateY(-20px);
+        transform: translateY(0) rotate(0deg);
     }
     40%{
-        transform: translateY(-60px);
+        transform: translateY(-180px) rotate(-20deg);
     }
     80%{
-        transform: translateY(-100px);
+        transform: translateY(10px) rotate(5deg);
     }
     100%{
-        transform: translateY(0);
+        transform: translateY(0) rotate(0deg);
     }
 }

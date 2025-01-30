@@ -3,6 +3,7 @@ import './App.css'
 
 function App() {
     const playgame = useRef(true);
+    const plane = useRef(null);
     const road = useRef(null);
     const road2 = useRef(null);
     const gamebox = useRef(null);
@@ -15,7 +16,7 @@ function App() {
                 playgame.current = false
                 let speedroad = 0;
                 let speedroad2 = 0;
-                let speedlevel = 1;
+                let speedlevel = 2;
                 let polleftgamebox = 0;
                 let polrightroad = 0;
                 let polrightroad2 = 0;
@@ -51,18 +52,6 @@ function App() {
                                 boxtown.current.children[i].remove();
                             }
                         });
-
-                        // for (let i = 0 ; i < arrtown.current.length ; i++) {
-                        //     let polright = arrtown.current[i].e.getBoundingClientRect();
-
-                        //     arrtown.current[i].e.style.left = `${arrtown.current[i].pol}px`;
-
-                        //     if (polright.right < polleftgamebox.left) {
-                        //         arrtown.current.splice(i,1);
-                        //         boxtown.current.children[i].remove();
-                        //         continue;
-                        //     }
-                        // }
                     }
 
                     speedroad -= speedlevel;
@@ -74,7 +63,7 @@ function App() {
                 },0);
 
                 let time2 = setInterval(() => {
-                    const arrimg = ["./town2.png","./town3.png"];
+                    const arrimg = ["./town1.png","./town2.png","./town3.png"];
                     let droplength = [];
                     let randomdroplength = Math.floor(Math.random() * 3);
 
@@ -83,7 +72,7 @@ function App() {
                     }
 
                     const createimg = document.createElement("img");
-                    createimg.src = arrimg[Math.floor(Math.random() * 2)];
+                    createimg.src = arrimg[Math.floor(Math.random() * 3)];
                     createimg.style.position = "absolute";
                     createimg.style.left = droplength[randomdroplength] + "px";
                     createimg.style.bottom = "2px";
@@ -92,19 +81,27 @@ function App() {
                         boxtown.current.appendChild(createimg);
                         arrtown.current.push({e:createimg,pol:droplength[randomdroplength]});
                     }
-                },1500);
+                },1200);
 
                 return () => clearInterval(time);
             }
             else {
-                
+                if (plane.current) {
+                    plane.current.classList.add("addplaneani");
+                }
             }
         }
     });
 
+    const aniend = () => {
+        if (plane.current) {
+            plane.current.classList.remove("addplaneani");
+        }
+    }
+
     return (
       <div ref={gamebox} className="boxgame">
-          <img className="plane" src="./plane.png" alt="" />
+          <img ref={plane} onAnimationEnd={aniend} className="plane" src="./plane.png" alt="" />
           <img ref={road} className="road" src="./road.png" alt="" />
           <img ref={road2} className="road" src="./road.png" alt="" />
           <div ref={boxtown} className="boxtown"></div>
