@@ -29,7 +29,7 @@ function App() {
             let polrightroad = 0;
             let polrightroad2 = 0;
 
-            if (playgame.current) {
+            if (playgame.current && selectref.current != "") {
                 playgame.current = false;
 
                 if (road2.current) {
@@ -208,6 +208,7 @@ function App() {
         clearInterval(time3.current);
         clearInterval(time4.current);
         playgame.current = true;
+        selectref.current = "";
     }
 
     return (
