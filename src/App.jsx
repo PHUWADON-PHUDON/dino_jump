@@ -2,6 +2,7 @@ import { useState,useRef,useCallback, useEffect } from 'react'
 import './App.css'
 
 function App() {
+    const [select,setselect] = useState("");
     const [countscore,setcountscore] = useState(0);
     const [counthiscore,setcounthiscore] = useState(0);
     const playgame = useRef(true);
@@ -13,6 +14,12 @@ function App() {
     const arrtown = useRef([]);
     const death = useRef(false);
     const speedlevel = useRef(2);
+    const checkdinoimg = useRef(false);
+    const selectref = useRef("");
+    const time1 = useRef(null);
+    const time2 = useRef(null);
+    const time3 = useRef(null);
+    const time4 = useRef(null);
 
     document.addEventListener("keydown",(event) => {
         if (event.key == " ") {
@@ -23,14 +30,29 @@ function App() {
             let polrightroad2 = 0;
 
             if (playgame.current) {
-                playgame.current = false
+                playgame.current = false;
 
                 if (road2.current) {
                     speedroad2 = road2.current.offsetWidth;
                     polleftgamebox = gamebox.current.getBoundingClientRect();
                 }
 
-                let time = setInterval(() => {
+                time1.current = setInterval(() => {
+                    if (selectref.current == "./dino1.png") {
+                        if (checkdinoimg.current) {
+                            setselect("./dino1.png");
+                            checkdinoimg.current = false;
+                        }
+                        else {
+                            setselect("./dino2.png");
+                            checkdinoimg.current = true;
+                        }
+                    }
+                    
+                    return () => clearInterval(time1.current);
+                },100);
+
+                time2.current = setInterval(() => {
                     if (road.current) {
                         polrightroad = road.current.getBoundingClientRect();
                         polrightroad2 = road2.current.getBoundingClientRect();
@@ -80,13 +102,20 @@ function App() {
                                 death.current = true;
                                 speedlevel.current = 0;
                                 plane.current.classList.add("addanimationpause");
+                                plane.current.classList.add("addanimationpausedino");
+                                clearInterval(time1.current);
+                                clearInterval(time2.current);
+                                clearInterval(time3.current);
+                                clearInterval(time4.current);
+                                playgame.current = true;
+
                         }
                     });
 
-                    return () => clearInterval(time);
+                    return () => clearInterval(time2.current);
                 },0);
 
-                let time2 = setInterval(() => {
+                time3.current = setInterval(() => {
                     const arrimg = ["./town1.png","./town2.png","./town3.png"];
                     let droplength = [];
                     let randomdroplength = Math.floor(Math.random() * 3);
@@ -106,21 +135,26 @@ function App() {
                         arrtown.current.push({e:createimg,pol:droplength[randomdroplength]});
                     }
 
-                    return () => clearInterval(time2);
+                    return () => clearInterval(time3.current);
                 },1200);
 
-                let time3 = setInterval(() => {
+                time4.current = setInterval(() => {
                     if (!death.current) {
                         setcountscore(prev => prev + 1);
                     }
 
-                    return () => clearInterval(time3);
+                    return () => clearInterval(time4.current);
                 },100);
             }
             else {
                 if (plane.current) {
                     if (!death.current) {
-                        plane.current.classList.add("addplaneani");
+                        if (selectref.current == "./dino1.png" || selectref.current == "./dino2.png") {
+                            plane.current.classList.add("adddinoani");
+                        }
+                        else {
+                            plane.current.classList.add("addplaneani");
+                        }
                     }
                     else {
                         speedlevel.current = 2;
@@ -128,6 +162,8 @@ function App() {
                         arrtown.current = [];
                         plane.current.classList.remove("addplaneani");
                         plane.current.classList.remove("addanimationpause");
+                        plane.current.classList.remove("adddinoani");
+                        plane.current.classList.remove("addanimationpausedino");
                         boxtown.current.innerHTML = "";
                         setcountscore(prev => 0);
                     }
@@ -136,9 +172,24 @@ function App() {
         }
     });
 
+    const selectPlayer = (value) => {
+        setselect(value);
+        selectref.current = value
+
+        if (plane.current) {
+            if (value == "./dino1.png") {
+                plane.current.style.bottom = "0";
+            }
+            else {
+                plane.current.style.bottom = "55px";
+            }
+        }
+    }
+
     const aniend = () => {
         if (plane.current) {
             plane.current.classList.remove("addplaneani");
+            plane.current.classList.remove("adddinoani");
         }
     }
 
@@ -150,13 +201,37 @@ function App() {
         }
     },[countscore]);
 
+    const clickSelect = () => {
+        setselect("");
+        clearInterval(time1.current);
+        clearInterval(time2.current);
+        clearInterval(time3.current);
+        clearInterval(time4.current);
+        playgame.current = true;
+    }
+
     return (
       <div ref={gamebox} className="boxgame">
-        <div className="displayscore">
-            <h2 className="hiscore">HI {counthiscore}</h2>
-            <h2 className="score">{countscore}</h2>
-        </div>
-        <img ref={plane} onAnimationEnd={aniend} className="plane" src="./plane.png" alt="" />
+        {select != "" ? 
+            <button onClick={() => clickSelect()} className="selectbtn">SELECT</button>:""
+        }
+        {select != "" ? 
+            <div className="displayscore">
+                <h2 className="hiscore">HI {counthiscore}</h2>
+                <h2 className="score">{countscore}</h2>
+            </div>:""
+        }
+        {select == "" ? 
+            <div className="select">
+                <div onClick={() => selectPlayer("./plane.png")}>
+                    <img src="./plane.png" alt="" />
+                </div>
+                <div onClick={() => selectPlayer("./dino1.png")}>
+                    <img src="./dino1.png" alt="" />
+                </div>
+            </div>:""
+        }
+        <img ref={plane} onAnimationEnd={aniend} className="plane" src={select} alt="" />
         <img ref={road} className="road" src="./road.png" alt="" />
         <img ref={road2} className="road" src="./road.png" alt="" />
         <div ref={boxtown} className="boxtown"></div>
